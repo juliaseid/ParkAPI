@@ -33,7 +33,8 @@ namespace ParkAPI.Models
       .HasData(
         new User { Id = 1, Username = "Pete", Password = "p" },
         new User { Id = 2, Username = "George", Password = "g" },
-        new User { Id = 3, Username = "Sam", Password = "s" }
+        new User { Id = 3, Username = "Sam", Password = "s" },
+        new User { Id = 100, Username = "Admin", Password = "admin" }
       );
 
     }

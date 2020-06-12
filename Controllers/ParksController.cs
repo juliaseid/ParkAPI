@@ -19,11 +19,11 @@ namespace ParkAPI.Controllers
       _db = db;
     }
 
-    [HttpGet]
-    public ActionResult<IEnumerable<Park>> Get()
-    {
-      return _db.Parks.ToList();
-    }
+    // [HttpGet]
+    // public ActionResult<IEnumerable<Park>> Get()
+    // {
+    //   return _db.Parks.ToList();
+    // }
 
     [HttpPost]
     public void Post([FromBody] Park park)
@@ -49,48 +49,70 @@ namespace ParkAPI.Controllers
       }
     }
 
-    //http://localhost:5000/api/remedies/1/9
     [HttpDelete("{userId}/{id}")]
     public void Delete(int id, int userId)
     {
-      var remedyToDelete = _db.Remedies.FirstOrDefault(entry => entry.RemedyId == id);
-      if (remedyToDelete.UserId == userId)
+      var parkToDelete = _db.Parks.FirstOrDefault(entry => entry.ParkId == id);
+      if (parkToDelete.UserId == userId)
       {
-        _db.Remedies.Remove(remedyToDelete);
+        _db.Parks.Remove(parkToDelete);
         _db.SaveChanges();
       }
     }
 
-    // GET api/Remedies
     [HttpGet]
-    // public ActionResult<IEnumerable<Remedy>> Get(string name, string details, string ailment, string category, string ingredients, int userId)
-    public ActionResult<Dictionary<string, object>> Get(string name, string details, string ailment, string category, string ingredients, int userId)
+    public ActionResult<Dictionary<string, object>> Get(string name, string location, string type, string entranceFee, string parkingPermit, string playground, string beach, string picnicArea, string realBathrooms, string visitorCenter, int userId)
     {
-      var query = _db.Remedies.AsQueryable();
+      var query = _db.Parks.AsQueryable();
 
       if (name != null)
       {
         query = query.Where(entry => entry.Name == name);
       }
 
-      if (details != null)
+      if (location != null)
       {
-        query = query.Where(entry => entry.Details.Contains(details));
+        query = query.Where(entry => entry.Location.Contains(location));
       }
 
-      if (ingredients != null)
+      if (type != null)
       {
-        query = query.Where(entry => entry.Ingredients.Contains(ingredients));
+        query = query.Where(entry => entry.Type.Contains(type));
       }
 
-      if (ailment != null)
+      if (entranceFee != null)
       {
-        query = query.Where(entry => entry.Ailment == ailment);
+        query = query.Where(entry => entry.EntranceFee <= int.Parse(entranceFee));
       }
 
-      if (category != null)
+      if (parkingPermit != null)
       {
-        query = query.Where(entry => entry.Category == category);
+        query = query.Where(entry => (entry.ParkingPermit == parkingPermit || null));
+      }
+
+      if (playground != null)
+      {
+        query = query.Where(entry => entry.Playground == true);
+      }
+
+      if (beach != null)
+      {
+        query = query.Where(entry => entry.Beach == true);
+      }
+
+      if (picnicArea != null)
+      {
+        query = query.Where(entry => entry.PicnicArea == true);
+      }
+
+      if (realBathrooms != null)
+      {
+        query = query.Where(entry => entry.RealBathrooms == true);
+      }
+
+      if (visitorCenter != null)
+      {
+        query = query.Where(entry => entry.VisitorCenter == true);
       }
 
       if (userId != 0)
@@ -98,8 +120,9 @@ namespace ParkAPI.Controllers
         query = query.Where(entry => entry.UserId == userId);
       }
       Dictionary<string, object> response = new Dictionary<string, object>();
-      response.Add("categories", EnvironmentVariables.Categories);
-      response.Add("remedies", query);
+      response.Add("Allowed Park Types", EnvironmentVariables.Types);
+      response.Add("Allowed Parking Permit Types", EnvironmentVariables.ParkingPermits);
+      response.Add("ParkList", query);
       return response;
     }
   }
