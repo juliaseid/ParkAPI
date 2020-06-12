@@ -39,6 +39,7 @@ namespace ParkAPI.Models
             $"That is not a valid type of parking permit",
             new[] { "ParkingPermit" });
       }
+
     }
   }
 }

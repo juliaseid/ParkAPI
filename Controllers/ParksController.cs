@@ -19,12 +19,6 @@ namespace ParkAPI.Controllers
       _db = db;
     }
 
-    // [HttpGet]
-    // public ActionResult<IEnumerable<Park>> Get()
-    // {
-    //   return _db.Parks.ToList();
-    // }
-
     [HttpPost]
     public void Post([FromBody] Park park)
     {
@@ -39,13 +33,18 @@ namespace ParkAPI.Controllers
     }
 
     [HttpPut("{userId}/{id}")]
-    public void Put(int userId, int id, [FromBody] Park park)
+    public IActionResult Put(int userId, int id, [FromBody] Park park)
     {
       park.ParkId = id;
       if (park.UserId == userId)
       {
         _db.Entry(park).State = EntityState.Modified;
         _db.SaveChanges();
+        return Ok();
+      }
+      else
+      {
+        return BadRequest(new { message = "This user is not permitted to edit this Park entry." });
       }
     }
 
