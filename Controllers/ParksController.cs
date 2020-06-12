@@ -87,7 +87,7 @@ namespace ParkAPI.Controllers
 
       if (parkingPermit != null)
       {
-        query = query.Where(entry => (entry.ParkingPermit == parkingPermit || null));
+        query = query.Where(entry => (entry.ParkingPermit == parkingPermit) || (entry.ParkingPermit == null));
       }
 
       if (playground != null)
