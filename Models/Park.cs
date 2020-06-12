@@ -29,14 +29,14 @@ namespace ParkAPI.Models
       if (!EnvironmentVariables.Types.Contains(Type))
       {
         yield return new ValidationResult(
-            $"That is not a valid type of park",
+            $"That is not a valid type of park.  Accepted park types are in the header of all GET requests.",
             new[] { "Type" });
       }
 
       if (!EnvironmentVariables.ParkingPermits.Contains(ParkingPermit))
       {
         yield return new ValidationResult(
-            $"That is not a valid type of parking permit",
+            $"That is not a valid type of parking permit.  Accepted parking permit types are in the header of all GET requests.",
             new[] { "ParkingPermit" });
       }
 
