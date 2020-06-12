@@ -50,16 +50,16 @@ _Have a bug or an issue with this application? [Open a new issue] here on GitHub
 
 ### Specs
 
-| Spec | Input | Output |
-| :------------- | :------------- | :------------- |
+|                          Specification                     | Input  | Output  |
+| :--------------------------------------------------------: | :----: | :-----: |
+| Allow user to search for a park by a range of criteria | 'Location = Issaquah' | 'Lake Sammamish State Park, Pine Lake Park' |
+| Allow user to search parks by categorized ratings | 'cleanliness = 4' | 'Marymoor Park, Clean: 4, Accessible: 4, etc.' |
+| Allow user to add parks to the database | "Cougar Mountain Regional Wildlands" | park and data added to database |
+| Require new Parks to use standard "type" and parking permit" language to ensure consistency | "Type = local" | "That is not an accepted type of park.  Accepted park types are in the header of API GET responses." |
+| Allow users to edit and delete park entries they have created. | "Cougar Mountain Park" | *park edited* |
+| Alert users when they attempt to edit a park with a different userID | "User Id = 7374652" | "This user is not permitted to edit this park entry. |
+| Allow users to post reviews for parks. | "Clean: 4, Accessible: 3, Fun For Kids: 3, Fun For Parents: 4" | *rating added* |
 
-| API allows user to search for a park by a range of criteria | User Input: "Location = Issaquah" | Output: "Lake Sammamish State Park, Pine Lake Park" |
-| API allows user to search parks by categorized ratings | User Input: "cleanliness = 4" | Output: "Marymoor Park, Clean: 4, Accessible: 4, etc." |
-| API allows user to add parks to the database | User Input: "Cougar Mountain Regional Wildlands" | Output: park and data added to database |
-| API requires new Parks to use standard "type" and parking permit" language to ensure consistency | User Input: "Type = local" | Output: "That is not an accepted type of park.  Accepted park types are in the header of API GET responses." |
-| API allows users to edit and delete park entries they have created. | User Input: "Cougar Mountain Park" | Output: *park edited* |
-| API alerts users when they attempt to edit a park with a different userID | User Input: "User Id = 7374652" | Output: "This user is not permitted to edit this park entry. |
-| API allows users to post reviews for parks. | User Input: "Clean: 4, Accessible: 3, Fun For Kids: 3, Fun For Parents: 4" | Output: *rating added* |
 
 
 ### License
