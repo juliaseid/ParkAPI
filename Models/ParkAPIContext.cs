@@ -22,6 +22,20 @@ namespace ParkAPI.Models
         new Park { ParkId = 3, Name = "Pine Lake Park", Location = "Sammamish/Issaquah", Type = "City Park", Playground = true, Beach = true, PicnicArea = true, RealBathrooms = true, VisitorCenter = false },
         new Park { ParkId = 4, Name = "Mount Rainier National Park", Location = "Multiple Entrances", Type = "National Park", EntranceFee = 30, Playground = false, Beach = false, PicnicArea = true, RealBathrooms = true, VisitorCenter = true }
       );
+      builder.Entity<Rating>()
+      .HasData(
+        new Rating { RatingId = 1, Clean = 4, Accessible = 2, FunForKids = 2, FunForParents = 3, ParkId = 4, UserId = 3, Comments = "Prepare for a lot of time in the car." },
+        new Rating { RatingId = 2, Clean = 3, Accessible = 4, FunForKids = 4, FunForParents = 4, ParkId = 3, UserId = 2, Comments = "Relaxing and fun, but the beach can get gross." },
+        new Rating { RatingId = 3, Clean = 2, Accessible = 5, FunForKids = 5, FunForParents = 3, ParkId = 1, UserId = 1, Comments = "Lots to do, but also lots of trash and goose poop." }
+      );
+
+      builder.Entity<User>()
+      .HasData(
+        new User { Id = 1, Username = "Pete", Password = "p" },
+        new User { Id = 2, Username = "George", Password = "g" },
+        new User { Id = 3, Username = "Sam", Password = "s" }
+      );
+
     }
   }
 }
