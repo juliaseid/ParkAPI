@@ -1,16 +1,13 @@
 using System.ComponentModel.DataAnnotations;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace ParkAPI.Models
 {
   public class Park
   {
     public int ParkId { get; set; }
-    [Required]
-    [StringLength(30)]
     public string Name { get; set; }
-    [Required]
-    [StringLength(200)]
     public string Location { get; set; }
     public string Type { get; set; }
     public int EntranceFee { get; set; }
