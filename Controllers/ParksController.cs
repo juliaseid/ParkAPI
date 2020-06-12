@@ -19,6 +19,9 @@ namespace ParkAPI.Controllers
       _db = db;
     }
 
+    ///<summary>
+    ///Creates a new Park entry in data table.
+    ///</summary>
     [HttpPost]
     public void Post([FromBody] Park park)
     {
@@ -26,52 +29,17 @@ namespace ParkAPI.Controllers
       _db.SaveChanges();
     }
 
-    [HttpGet("{id}")]
-    public ActionResult<Park> Get(int id)
-    {
-      return _db.Parks.FirstOrDefault(entry => entry.ParkId == id);
-    }
-
-    [HttpPut("{userId}/{id}")]
-    public IActionResult Put(int userId, int id, [FromBody] Park park)
-    {
-      park.ParkId = id;
-      if (park.UserId == userId)
-      {
-        _db.Entry(park).State = EntityState.Modified;
-        _db.SaveChanges();
-        return Ok();
-      }
-      else
-      {
-        return BadRequest(new { message = "This user is not permitted to edit this Park entry." });
-      }
-    }
-
-    [HttpDelete("{userId}/{id}")]
-    public IActionResult Delete(int id, int userId)
-    {
-      var parkToDelete = _db.Parks.FirstOrDefault(entry => entry.ParkId == id);
-      if (parkToDelete.UserId == userId)
-      {
-        _db.Parks.Remove(parkToDelete);
-        _db.SaveChanges();
-        return Ok();
-      }
-      else
-      {
-        return BadRequest(new { message = "This user is not permitted to delete this Park entry." });
-      }
-    }
-
+    ///<summary>
+    ///Finds parks in database using flexible search parameters.  Enter "yes" for required features (playground, beach, etc.).
+    ///</summary>
     [HttpGet]
-    public ActionResult<Dictionary<string, object>> Get(string name, string location, string type, string entranceFee, string parkingPermit, string playground, string beach, string picnicArea, string realBathrooms, string visitorCenter, int userId)
+    public ActionResult<Dictionary<string, object>> Get(string name, string location, string type, string entranceFee, string parkingPermit, string playgroundReq, string beachReq, string picnicAreaReq, string realBathroomsReq, string visitorCenterReq, int userId)
     {
       var query = _db.Parks.AsQueryable();
 
       if (name != null)
       {
-        query = query.Where(entry => entry.Name == name);
+        query = query.Where(entry => entry.Name.Contains(name));
       }
 
       if (location != null)
@@ -94,27 +62,27 @@ namespace ParkAPI.Controllers
         query = query.Where(entry => (entry.ParkingPermit == parkingPermit) || (entry.ParkingPermit == null));
       }
 
-      if (playground != null)
+      if (playgroundReq == "yes")
       {
         query = query.Where(entry => entry.Playground == true);
       }
 
-      if (beach != null)
+      if (beachReq == "yes")
       {
         query = query.Where(entry => entry.Beach == true);
       }
 
-      if (picnicArea != null)
+      if (picnicAreaReq == "yes")
       {
         query = query.Where(entry => entry.PicnicArea == true);
       }
 
-      if (realBathrooms != null)
+      if (realBathroomsReq == "yes")
       {
         query = query.Where(entry => entry.RealBathrooms == true);
       }
 
-      if (visitorCenter != null)
+      if (visitorCenterReq == "yes")
       {
         query = query.Where(entry => entry.VisitorCenter == true);
       }
@@ -128,6 +96,53 @@ namespace ParkAPI.Controllers
       response.Add("Allowed Parking Permit Types", EnvironmentVariables.ParkingPermits);
       response.Add("ParkList", query);
       return response;
+    }
+
+    ///<summary>
+    ///Look up Parks by ParkId
+    ///</summary>
+    [HttpGet("{id}")]
+    public ActionResult<Park> Get(int id)
+    {
+      return _db.Parks.FirstOrDefault(entry => entry.ParkId == id);
+    }
+
+    ///<summary>
+    ///Editing parks only possible when userId input matches Park's UserId in database.
+    ///</summary>
+    [HttpPut("{userId}/{id}")]
+    public IActionResult Put(int userId, int id, [FromBody] Park park)
+    {
+      park.ParkId = id;
+      if (park.UserId == userId)
+      {
+        _db.Entry(park).State = EntityState.Modified;
+        _db.SaveChanges();
+        return Ok();
+      }
+      else
+      {
+        return BadRequest(new { message = "This user is not permitted to edit this Park entry." });
+      }
+    }
+
+    ///<summary>
+    ///Deleting parks only possible when userId input matches Park's UserId in database.
+    ///</summary>
+    [HttpDelete("{userId}/{id}")]
+    public IActionResult Delete(int id, int userId)
+    {
+      var parkToDelete = _db.Parks.FirstOrDefault(entry => entry.ParkId == id);
+      if (parkToDelete.UserId == userId)
+      {
+        _db.Parks.Remove(parkToDelete);
+        _db.SaveChanges();
+        return Ok();
+      }
+      else
+      {
+        return BadRequest(new { message = "This user is not permitted to delete this Park entry." });
+      }
     }
   }
 }
