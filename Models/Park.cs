@@ -20,6 +20,8 @@ namespace ParkAPI.Models
     public bool PicnicArea { get; set; }
     public bool RealBathrooms { get; set; }
     public bool VisitorCenter { get; set; }
+    [Required]
+    public int UserId { get; set; }
 
 
     public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
