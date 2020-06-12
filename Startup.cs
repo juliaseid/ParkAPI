@@ -10,6 +10,10 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using System;
+using System.Reflection;
+using System.IO;
+using Microsoft.OpenApi.Models;
 
 
 
@@ -55,6 +59,30 @@ namespace ParkAPI
       });
 
       services.AddScoped<IUserService, UserService>();
+
+      services.AddSwaggerGen(c =>
+      {
+        c.SwaggerDoc("v1", new OpenApiInfo
+        {
+          Version = "v1",
+          Title = "Family Parks API",
+          Description = "A database of parks focused on what matters to young families.",
+          Contact = new OpenApiContact
+          {
+            Name = "Julia Seidman",
+            Email = string.Empty,
+            Url = new Uri("https://www.linkedin.com/in/juliaseid/"),
+          },
+          License = new OpenApiLicense
+          {
+            Name = "Use under LICX",
+          }
+        });
+
+        var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+        var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+        c.IncludeXmlComments(xmlPath);
+      });
     }
 
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -74,6 +102,14 @@ namespace ParkAPI
 
       // app.UseHttpsRedirection();
       app.UseMvc();
+
+      app.UseSwagger();
+
+      app.UseSwaggerUI(c =>
+      {
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "Family Parks API V1");
+        c.RoutePrefix = string.Empty;
+      });
     }
   }
 }
