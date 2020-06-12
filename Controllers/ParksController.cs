@@ -49,13 +49,18 @@ namespace ParkAPI.Controllers
     }
 
     [HttpDelete("{userId}/{id}")]
-    public void Delete(int id, int userId)
+    public IActionResult Delete(int id, int userId)
     {
       var parkToDelete = _db.Parks.FirstOrDefault(entry => entry.ParkId == id);
       if (parkToDelete.UserId == userId)
       {
         _db.Parks.Remove(parkToDelete);
         _db.SaveChanges();
+        return Ok();
+      }
+      else
+      {
+        return BadRequest(new { message = "This user is not permitted to delete this Park entry." });
       }
     }
 
